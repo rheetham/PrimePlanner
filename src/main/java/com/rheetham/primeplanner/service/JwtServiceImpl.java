@@ -1,5 +1,7 @@
 package com.rheetham.primeplanner.service;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
+import java.util.function.Function;
 
 @Service
 public class JwtServiceImpl implements JwtService{
@@ -23,7 +26,20 @@ public class JwtServiceImpl implements JwtService{
 
     @Override
     public String extractUsername(String token) {
-        return "";
+        return extractClaims(token, Claims::getSubject);
+    }
+
+    private <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     @Override
