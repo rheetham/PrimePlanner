@@ -13,6 +13,7 @@ import java.util.List;
 @Table(name = "users")
 @Entity
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
@@ -45,54 +46,8 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Todo> todos;
 
-    public User() {
+    public User() {}
 
-    }
-
-    public User(String firstName, String lastName, String email, String password, Date createdAt, Date updatedAt) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -105,12 +60,12 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return "";
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return email;
     }
 
     @Override
@@ -131,5 +86,41 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

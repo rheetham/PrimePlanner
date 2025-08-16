@@ -41,8 +41,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
-        throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
@@ -52,17 +51,19 @@ public class SecurityConfig {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setContentType("application/json");
             response.setHeader("WWW-Authenticate", "");
-            response.getWriter().write("{\"error\": \"Unauthorized Access\"}");
+            response.getWriter().write("{\"error\": \"Unauthorized access\"}");
         };
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http)
-        throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(configurer ->
                 configurer
-                        .requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**",
-                                "/swagger-resources/**", "/webjars/**", "/docs").permitAll());
+                        .requestMatchers("/api/auth/**","/swagger-ui/**", "/v3/api-docs/**",
+                                "/swagger-resources/**", "/webjars/**", "/docs").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+        );
 
         http.csrf(csrf -> csrf.disable());
 
@@ -78,6 +79,9 @@ public class SecurityConfig {
         return http.build();
     }
 }
+
+
+
 
 
 

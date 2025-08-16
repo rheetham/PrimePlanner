@@ -8,9 +8,7 @@ public class Authority implements GrantedAuthority {
 
     private String authority;
 
-    public Authority() {
-
-    }
+    public Authority() {}
 
     public Authority(String authority) {
         this.authority = authority;
